@@ -1,0 +1,38 @@
+name: Deploy to Local Machine
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      RAILS_ENV: ${{ secrets.RAILS_ENV }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
+
+      - name: Capistrano deploy
+        run: bundle exec cap production deploy
