@@ -43,6 +43,6 @@ jobs:
 
     - name: 🚀 Deploy to Local with Capistrano
   env:
-    DEPLOY_USER: your_mac_user_name
+    DEPLOY_USER: "shubhamjain"
   run: |
     bundle exec cap development deploy
