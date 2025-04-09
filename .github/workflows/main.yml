@@ -1,42 +1,49 @@
-name: Deploy to Local Machine
+name: CI/CD for Rails on EC2
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+
+env:
+  RAILS_ENV: production
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
-      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-      RAILS_ENV: ${{ secrets.RAILS_ENV }}
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: 📥 Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
+    - name: 💎 Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.2
+        bundler-cache: true
 
-      - name: Install dependencies
-        run: bundle install
+    - name: 🔧 Install Gems
+      run: bundle install --jobs 4 --retry 3
 
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          cat <<EOF > ~/.ssh/id_rsa
-            ${{ secrets.SSH_PRIVATE_KEY }}
-          EOF
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "$DEPLOY_SERVER" >> ~/.ssh/known_hosts
-        env:
-          DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
+    - name: 🧪 Run RSpec Tests
+      run: bundle exec rspec
 
-      - name: Capistrano deploy
-        run: bundle exec cap development deploy
+    - name: 📏 Run RuboCop
+      run: bundle exec rubocop
+
+    - name: 🛡️ Run Brakeman Security Scan
+      run: bundle exec brakeman -z
+
+    - name: 🔐 Upload Rails Master Key
+      run: echo "${{ secrets.RAILS_MASTER_KEY }}" > config/master.key
+
+    - name: 🔐 Setup SSH Agent
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: 🚀 Deploy to EC2 with Capistrano
+      env:
+        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      run: |
+        bundle exec cap development deploy
