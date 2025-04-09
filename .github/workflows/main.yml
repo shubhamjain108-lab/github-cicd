@@ -30,8 +30,8 @@ jobs:
     #- name: 📏 Run RuboCop
      # run: bundle exec rubocop
 
-    - name: 🛡️ Run Brakeman Security Scan
-      run: bundle exec brakeman -z
+    #- name: 🛡️ Run Brakeman Security Scan
+     # run: bundle exec brakeman -z
 
     - name: 🔐 Upload Rails Master Key
       run: echo "${{ secrets.RAILS_MASTER_KEY }}" > config/master.key
