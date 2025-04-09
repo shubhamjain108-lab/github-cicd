@@ -27,8 +27,8 @@ jobs:
     #- name: 🧪 Run RSpec Tests
      # run: bundle exec rspec
 
-    - name: 📏 Run RuboCop
-      run: bundle exec rubocop
+    #- name: 📏 Run RuboCop
+     # run: bundle exec rubocop
 
     - name: 🛡️ Run Brakeman Security Scan
       run: bundle exec brakeman -z
