@@ -31,8 +31,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           cat <<EOF > ~/.ssh/id_rsa
-${{ secrets.SSH_PRIVATE_KEY }}
-EOF
+            ${{ secrets.SSH_PRIVATE_KEY }}
+          EOF
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H "$DEPLOY_SERVER" >> ~/.ssh/known_hosts
         env:
