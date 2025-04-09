@@ -29,12 +29,12 @@ jobs:
 
       - name: Setup SSH
         run: |
-        mkdir -p ~/.ssh
-        cat <<EOF > ~/.ssh/id_rsa
-          ${{ secrets.SSH_PRIVATE_KEY }}
-        EOF
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H "$DEPLOY_SERVER" >> ~/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          cat <<EOF > ~/.ssh/id_rsa
+            ${{ secrets.SSH_PRIVATE_KEY }}
+          EOF
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$DEPLOY_SERVER" >> ~/.ssh/known_hosts
         env:
           DEPLOY_SERVER: ${{ secrets.DEPLOY_SERVER }}
 
