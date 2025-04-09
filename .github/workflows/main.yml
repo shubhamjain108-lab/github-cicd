@@ -41,9 +41,8 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: 🚀 Deploy to EC2 with Capistrano
-      env:
-        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-      run: |
-        bundle exec cap development deploy
+    - name: 🚀 Deploy to Local with Capistrano
+  env:
+    DEPLOY_USER: your_mac_user_name
+  run: |
+    bundle exec cap development deploy
