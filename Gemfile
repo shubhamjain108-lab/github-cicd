@@ -58,3 +58,15 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+
+gem 'debug', group: [:development, :test]
+gem "capistrano-rails", "~> 1.7"
+gem "capistrano-puma", "~> 0.2.3"
+group :development do
+  gem "ed25519", "~> 1.2"
+  gem "bcrypt_pbkdf", "~> 1.0"
+end
+gem 'capistrano', '~> 3.6'
+gem 'capistrano-bundler', '~> 2.0'
+gem "capistrano-rvm", "~> 0.1.2"
