@@ -35,4 +35,4 @@ jobs:
           ssh-keyscan -H $DEPLOY_SERVER >> ~/.ssh/known_hosts
 
       - name: Capistrano deploy
-        run: bundle exec cap production deploy
+        run: bundle exec cap development deploy
